@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Orrivo Login & Signup</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+</head>
+<body>
+  <h2>Signup</h2>
+  <input type="email" id="signupEmail" placeholder="Email"><br>
+  <input type="password" id="signupPassword" placeholder="Password"><br>
+  <button id="signupBtn">Signup</button>
+
+  <h2>Login</h2>
+  <input type="email" id="loginEmail" placeholder="Email"><br>
+  <input type="password" id="loginPassword" placeholder="Password"><br>
+  <button id="loginBtn">Login</button>
+
+  <h2>Status</h2>
+  <p id="statusMsg"></p>
+
+  <script type="module">
+    const firebaseConfig = {
+      apiKey: "AIzaSyAnW1oW-VLgI6yCxCR8S0GF31nZc4s1eKA",
+      authDomain: "orrivo-25.firebaseapp.com",
+      databaseURL: "https://orrivo-25-default-rtdb.firebaseio.com",
+      projectId: "orrivo-25",
+      storageBucket: "orrivo-25.firebasestorage.app",
+      messagingSenderId: "111849960679",
+      appId: "1:111849960679:web:477c2108e6092c9fe5de42",
+      measurementId: "G-YRL6XPS7R5"
+    };
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { 
+      getAuth, 
+      createUserWithEmailAndPassword, 
+      signInWithEmailAndPassword,
+      onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // SIGNUP
+    document.getElementById('signupBtn').addEventListener('click', () => {
+      const email = document.getElementById('signupEmail').value;
+      const password = document.getElementById('signupPassword').value;
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          document.getElementById('statusMsg').innerText = "✅ Signup successful";
+          window.location.href = "https://sites.google.com/view/orrivo/home"; // Redirect after signup
+        })
+        .catch(error => {
+          document.getElementById('statusMsg').innerText = "❌ " + error.message;
+        });
+    });
+
+    // LOGIN
+    document.getElementById('loginBtn').addEventListener('click', () => {
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          document.getElementById('statusMsg').innerText = "✅ Login successful";
+          window.location.href = "https://sites.google.com/view/orrivo/home"; // Redirect after login
+        })
+        .catch(error => {
+          document.getElementById('statusMsg').innerText = "❌ " + error.message;
+        });
+    });
+
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        console.log("Logged in as:", user.email);
+      } else {
+        console.log("No user logged in");
+      }
+    });
+  </script>
+</body>
+</html>
